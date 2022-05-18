@@ -41,7 +41,21 @@ class PoetryCache extends CacheDistributor {
     };
   }
 
+  private async useCurrentPythonVersion() {
+    const {stderr, exitCode} = await exec.getExecOutput('poetry', [
+      'env',
+      'use',
+      this.pythonVersion
+    ]);
+
+    if (exitCode && stderr) {
+      throw new Error('Could not setup python version');
+    }
+  }
+
   private async getPoetryConfiguration() {
+    await this.useCurrentPythonVersion();
+
     const {stdout, stderr, exitCode} = await exec.getExecOutput('poetry', [
       'config',
       '--list'
