@@ -75,6 +75,7 @@ jobs:
         run: poetry init -n
       - name: Install dependencies
         run: poetry add flake8
+      - run: poetry run python --version
 
   python-pip-dependencies-caching-path:
     name: Test pip (Python ${{ matrix.python-version}}, ${{ matrix.os }})
