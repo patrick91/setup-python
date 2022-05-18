@@ -38390,8 +38390,22 @@ class PoetryCache extends cache_distributor_1.default {
             };
         });
     }
+    useCurrentPythonVersion() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { stdout, stderr, exitCode } = yield exec.getExecOutput('poetry', [
+                'env',
+                'use',
+                this.pythonVersion
+            ]);
+            throw new Error(stdout);
+            if (exitCode && stderr) {
+                throw new Error('Could not setup python version');
+            }
+        });
+    }
     getPoetryConfiguration() {
         return __awaiter(this, void 0, void 0, function* () {
+            yield this.useCurrentPythonVersion();
             const { stdout, stderr, exitCode } = yield exec.getExecOutput('poetry', [
                 'config',
                 '--list'
